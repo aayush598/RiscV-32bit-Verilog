@@ -1,0 +1,46 @@
+$date
+	Sun Feb 09 20:47:45 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module tb_instruction_memory $end
+$var wire 32 ! instr [31:0] $end
+$var reg 32 " addr [31:0] $end
+$scope module uut $end
+$var wire 32 # addr [31:0] $end
+$var wire 32 $ instr [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b110011 $
+b0 #
+b0 "
+b110011 !
+$end
+#10000
+b100000000000010010011 !
+b100000000000010010011 $
+b100 "
+b100 #
+#20000
+b1000000000000100010011 !
+b1000000000000100010011 $
+b1000 "
+b1000 #
+#30000
+b1100001000000110010011 !
+b1100001000000110010011 $
+b1100 "
+b1100 #
+#40000
+b10000010000001000010011 !
+b10000010000001000010011 $
+b10000 "
+b10000 #
+#100000

@@ -1,0 +1,59 @@
+#! /c/Source/iverilog-install/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-1110-g18392a46)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision - 12;
+:vpi_module "C:\iverilog\lib\ivl\system.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_sys.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_textio.vpi";
+:vpi_module "C:\iverilog\lib\ivl\v2005_math.vpi";
+:vpi_module "C:\iverilog\lib\ivl\va_math.vpi";
+S_0000015636d5a480 .scope module, "tb_pc_plus4" "tb_pc_plus4" 2 3;
+ .timescale -9 -12;
+v0000015636de2fd0_0 .var "pc_in", 31 0;
+v0000015636de3070_0 .net "pc_out", 31 0, L_0000015636de3110;  1 drivers
+S_0000015636d5a610 .scope module, "uut" "pc_plus4" 2 10, 3 10 0, S_0000015636d5a480;
+ .timescale -9 -12;
+    .port_info 0 /INPUT 32 "pc_in";
+    .port_info 1 /OUTPUT 32 "pc_out";
+L_0000015636e59018 .functor BUFT 1, C4<00000000000000000000000000000100>, C4<0>, C4<0>, C4<0>;
+v0000015636d5a7a0_0 .net/2u *"_ivl_0", 31 0, L_0000015636e59018;  1 drivers
+v0000015636d5ebc0_0 .net "pc_in", 31 0, v0000015636de2fd0_0;  1 drivers
+v0000015636de2f30_0 .net "pc_out", 31 0, L_0000015636de3110;  alias, 1 drivers
+L_0000015636de3110 .arith/sum 32, v0000015636de2fd0_0, L_0000015636e59018;
+    .scope S_0000015636d5a480;
+T_0 ;
+    %vpi_call 2 18 "$dumpfile", "pc_plus4.vcd" {0 0 0};
+    %vpi_call 2 19 "$dumpvars", 32'sb00000000000000000000000000000000, S_0000015636d5a480 {0 0 0};
+    %pushi/vec4 0, 0, 32;
+    %store/vec4 v0000015636de2fd0_0, 0, 32;
+    %delay 10000, 0;
+    %pushi/vec4 4, 0, 32;
+    %store/vec4 v0000015636de2fd0_0, 0, 32;
+    %delay 10000, 0;
+    %pushi/vec4 8, 0, 32;
+    %store/vec4 v0000015636de2fd0_0, 0, 32;
+    %delay 10000, 0;
+    %pushi/vec4 12, 0, 32;
+    %store/vec4 v0000015636de2fd0_0, 0, 32;
+    %delay 10000, 0;
+    %pushi/vec4 256, 0, 32;
+    %store/vec4 v0000015636de2fd0_0, 0, 32;
+    %delay 10000, 0;
+    %pushi/vec4 4294967292, 0, 32;
+    %store/vec4 v0000015636de2fd0_0, 0, 32;
+    %delay 10000, 0;
+    %delay 50000, 0;
+    %vpi_call 2 29 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+    .scope S_0000015636d5a480;
+T_1 ;
+    %vpi_call 2 34 "$monitor", "Time=%0t | pc_in=%h | pc_out=%h", $time, v0000015636de2fd0_0, v0000015636de3070_0 {0 0 0};
+    %end;
+    .thread T_1;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "tb_pc_plus4.v";
+    "pc_plus4.v";

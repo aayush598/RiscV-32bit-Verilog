@@ -1,0 +1,51 @@
+$date
+	Sun Feb 09 19:54:56 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module tb_pc_plus4 $end
+$var wire 32 ! pc_out [31:0] $end
+$var reg 32 " pc_in [31:0] $end
+$scope module uut $end
+$var wire 32 # pc_in [31:0] $end
+$var wire 32 $ pc_out [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b100 $
+b0 #
+b0 "
+b100 !
+$end
+#10000
+b1000 !
+b1000 $
+b100 "
+b100 #
+#20000
+b1100 !
+b1100 $
+b1000 "
+b1000 #
+#30000
+b10000 !
+b10000 $
+b1100 "
+b1100 #
+#40000
+b100000100 !
+b100000100 $
+b100000000 "
+b100000000 #
+#50000
+b0 !
+b0 $
+b11111111111111111111111111111100 "
+b11111111111111111111111111111100 #
+#110000

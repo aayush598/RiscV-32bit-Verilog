@@ -1,0 +1,109 @@
+$date
+	Sun Feb 09 23:47:09 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module tb_alu $end
+$var wire 1 ! zero_flag $end
+$var wire 32 " alu_result [31:0] $end
+$var reg 4 # alu_control [3:0] $end
+$var reg 32 $ operand_a [31:0] $end
+$var reg 32 % operand_b [31:0] $end
+$scope module uut $end
+$var wire 4 & alu_control [3:0] $end
+$var wire 32 ' operand_a [31:0] $end
+$var wire 32 ( operand_b [31:0] $end
+$var reg 32 ) alu_result [31:0] $end
+$var reg 1 ! zero_flag $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b1000 )
+b11 (
+b101 '
+b0 &
+b11 %
+b101 $
+b0 #
+b1000 "
+0!
+$end
+#10000
+b10 "
+b10 )
+b1 #
+b1 &
+#20000
+1!
+b0 "
+b0 )
+b10 #
+b10 &
+b1 %
+b1 (
+b11110000000000000000000000000000 $
+b11110000000000000000000000000000 '
+#30000
+0!
+b11110000000000000000000000000001 "
+b11110000000000000000000000000001 )
+b11 #
+b11 &
+#40000
+b110 "
+b110 )
+b100 #
+b100 &
+b11 %
+b11 (
+b101 $
+b101 '
+#50000
+b100 "
+b100 )
+b101 #
+b101 &
+b10 %
+b10 (
+b1 $
+b1 '
+#60000
+b110 #
+b110 &
+b10000 $
+b10000 '
+#70000
+b11111110000000000000000000000000 "
+b11111110000000000000000000000000 )
+b111 #
+b111 &
+b11 %
+b11 (
+b11110000000000000000000000000000 $
+b11110000000000000000000000000000 '
+#80000
+b1 "
+b1 )
+b1000 #
+b1000 &
+b1010 %
+b1010 (
+b101 $
+b101 '
+#90000
+1!
+b0 "
+b0 )
+b1001 #
+b1001 &
+b1 %
+b1 (
+b11111111111111111111111111111111 $
+b11111111111111111111111111111111 '
+#150000
