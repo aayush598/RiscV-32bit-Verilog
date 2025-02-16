@@ -192,6 +192,17 @@ module ALU_Control(clk, reset, i_Func7, i_Func3, i_ALUOp, o_Operation);
             6'b10_0_010: o_Operation <= 4'b1010; // SLT (Set Less Than)
             6'b10_0_011: o_Operation <= 4'b1011; // SLTU (Set Less Than Unsigned)
 
+            // I TYPE INSTRUCTIONS
+            6'b11_0_000: o_Operation <= 4'b0010; // ADDI
+            6'b11_0_111: o_Operation <= 4'b0000; // ANDI
+            6'b11_0_110: o_Operation <= 4'b0001; // ORI
+            6'b11_0_100: o_Operation <= 4'b1000; // XORI
+            6'b11_0_001: o_Operation <= 4'b0100; // SLLI (Shift Left Logical Immediate)
+            6'b11_0_101: o_Operation <= 4'b0101; // SRLI (Shift Right Logical Immediate)
+            6'b11_1_101: o_Operation <= 4'b0111; // SRAI (Shift Right Arithmetic Immediate)
+            6'b11_0_010: o_Operation <= 4'b1010; // SLTI (Set Less Than Immediate)
+            6'b11_0_011: o_Operation <= 4'b1011; // SLTUI (Set Less Than Unsigned Immediate)
+
             default: o_Operation <= 4'b1111;
         endcase
     end
@@ -209,18 +220,14 @@ module ALU(A, B, i_Operation, o_ALU_Result, o_Zero);
             4'b0000 : o_ALU_Result <= A & B;   // AND
             4'b0001 : o_ALU_Result <= A | B;   // OR
             4'b0010 : o_ALU_Result <= A + B;   // ADD
-            4'b0011 : o_ALU_Result <= A - A;   // Zero (Redundant but kept)
             4'b0100 : o_ALU_Result <= A << B;   // SLL (Shift Left Logical)
             4'b0101 : o_ALU_Result <= A >> B;   // SRL (Shift Right Logical)
             4'b0110 : o_ALU_Result <= A - B;   // SUB
             4'b0111 : o_ALU_Result <= $signed(A) >>> B;   // SRA (Shift Right Arithmetic)
             4'b1000 : o_ALU_Result <= (A ^ B); // XOR
-            4'b1001 : o_ALU_Result <= B + 1;  // Increment B
             4'b1010 : o_ALU_Result <= ($signed(A) < $signed(B)) ? 32'h00000001 : 32'h00000000; // SLT
-            4'b1011 : o_ALU_Result <= (A < B) ? 32'h00000001 : 32'h00000000; // SLT
-            4'b1100 : o_ALU_Result <= B - 1;  // Decrement B
-            4'b1101 : o_ALU_Result <= A;       // Pass A
-            4'b1110 : o_ALU_Result <= ~A;      // NOT A
+            4'b1011 : o_ALU_Result <= (A < B) ? 32'h00000001 : 32'h00000000; // SLTU
+
             4'b1111 : o_ALU_Result <= 32'h00000000; // Zero output
         endcase
 
