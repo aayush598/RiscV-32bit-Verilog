@@ -180,11 +180,11 @@ module ALU_Control(clk, reset, i_Func7, i_Func3, i_ALUOp, o_Operation);
             6'b01_0_110: o_Operation <= 4'b1100; // BLTU
             6'b01_0_111: o_Operation <= 4'b1101; // BGEU
 
-
-            6'b10_0_000: o_Operation <= 4'b0010;
-            6'b10_1_000: o_Operation <= 4'b0110;
-            6'b10_0_111: o_Operation <= 4'b0000;
-            6'b10_0_110: o_Operation <= 4'b0001;
+            // R TYPE INSTRUCTIONS
+            6'b10_0_000: o_Operation <= 4'b0010; // ADD
+            6'b10_1_000: o_Operation <= 4'b0110; // SUB
+            6'b10_0_111: o_Operation <= 4'b0000; // AND
+            6'b10_0_110: o_Operation <= 4'b0001; // OR
             6'b10_0_100: o_Operation <= 4'b1000; // XOR
             6'b10_0_001: o_Operation <= 4'b0100; // SLL (Shift Left Logical)
             6'b10_0_101: o_Operation <= 4'b0101; // SRL (Shift Right Logical)
@@ -210,15 +210,15 @@ module ALU(A, B, i_Operation, o_ALU_Result, o_Zero);
             4'b0001 : o_ALU_Result <= A | B;   // OR
             4'b0010 : o_ALU_Result <= A + B;   // ADD
             4'b0011 : o_ALU_Result <= A - A;   // Zero (Redundant but kept)
-            4'b0100 : o_ALU_Result <= B + 1;   // Increment B
-            4'b0101 : o_ALU_Result <= B - 1;   // Decrement B
+            4'b0100 : o_ALU_Result <= A << B;   // SLL (Shift Left Logical)
+            4'b0101 : o_ALU_Result <= A >> B;   // SRL (Shift Right Logical)
             4'b0110 : o_ALU_Result <= A - B;   // SUB
-            4'b0111 : o_ALU_Result <= ~(A ^ B);   // XNOR
+            4'b0111 : o_ALU_Result <= $signed(A) >>> B;   // SRA (Shift Right Arithmetic)
             4'b1000 : o_ALU_Result <= (A ^ B); // XOR
-            4'b1001 : o_ALU_Result <= A << B;  // SLL (Shift Left Logical)
-            4'b1010 : o_ALU_Result <= A >> B;  // SRL (Shift Right Logical)
-            4'b1011 : o_ALU_Result <= $signed(A) >>> B; // SRA (Shift Right Arithmetic)
-            4'b1100 : o_ALU_Result <= (A < B) ? 32'h00000001 : 32'h00000000; // SLT
+            4'b1001 : o_ALU_Result <= B + 1;  // Increment B
+            4'b1010 : o_ALU_Result <= ($signed(A) < $signed(B)) ? 32'h00000001 : 32'h00000000; // SLT
+            4'b1011 : o_ALU_Result <= (A < B) ? 32'h00000001 : 32'h00000000; // SLT
+            4'b1100 : o_ALU_Result <= B - 1;  // Decrement B
             4'b1101 : o_ALU_Result <= A;       // Pass A
             4'b1110 : o_ALU_Result <= ~A;      // NOT A
             4'b1111 : o_ALU_Result <= 32'h00000000; // Zero output
