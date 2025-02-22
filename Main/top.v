@@ -141,15 +141,14 @@ module Control(i_Instruction, o_Branch, o_MemRead, o_MemtoReg, o_ALUOp, o_MemWri
     end
 endmodule
 
-module ImmediateGenerator(clk,i_Instruction, o_Immediate);
-    input clk;
+module ImmediateGenerator(i_Instruction, o_Immediate);
     input [31:0] i_Instruction;
-    output reg [31:0] o_Immediate;
+    output reg [31:0] o_Immediate;    
 
     initial begin
-        o_Immediate = 32'd0;
+        o_Immediate <= 32'd0;
     end
-    always @(posedge clk)
+    always @(*)
         begin
             case(i_Instruction[6:0])
                 7'b0010011 : o_Immediate <= {{20{i_Instruction[31]}}, i_Instruction[31:20]};
@@ -315,7 +314,7 @@ module top(clk, reset);
     mux Mux1 (.A(PCPlus4), .B(SumOut), .sel(Select), .Y(Mux1Out));
     Instruction_Memory IM ( .clk(clk), .reset(reset), .PC_in(PC_out), .Instruction_out(InstructionOut) );
     Control Control (.i_Instruction(InstructionOut[6:0]), .o_Branch(Branch), .o_MemRead(MemRead), .o_MemtoReg(MemtoReg), .o_ALUOp(ALUOp), .o_MemWrite(MemWrite), .o_ALUSrc(ALUSrc), .o_RegWrite(RegWrite));
-    ImmediateGenerator ImmGen (.clk(clk), .i_Instruction(InstructionOut), .o_Immediate(ImmediateOut));
+    ImmediateGenerator ImmGen ( .i_Instruction(InstructionOut), .o_Immediate(ImmediateOut));
     Register Reg (.clk(clk), .reset(reset), .i_RS1(InstructionOut[19:15]), .i_RS2(InstructionOut[24:20]), .i_RD1(InstructionOut[11:7]), .i_WriteData(Mux3Out), .i_RegWrite(RegWrite), .o_ReadData1(ReadData1Out), .o_ReadData2(ReadData2Out));
     mux Mux2 (.A(ReadData2Out), .B(ImmediateOut), .sel(ALUSrc), .Y(Mux2Out));
     ALU_Control AC (.clk(clk), .i_Func7(InstructionOut[30]), .i_Func3(InstructionOut[14:12]), .i_ALUOp(ALUOp), .o_Operation(Control_out));
