@@ -39,17 +39,17 @@ module Program_counter(clk, reset, PC_in, PC_out);
 
     always @(posedge clk or posedge reset)
         begin
-            PC_out <= (reset)? 32'h00000000 : PC_in;
+            PC_out = (reset)? 32'h00000000 : PC_in;
         end
 
 endmodule
 
-module PC_Plus_4(PC_in, PC_out);
-
+module PC_Plus_4(clk, PC_in, PC_out);
+    input clk;
     input [31:0] PC_in;
     output [31:0] PC_out;
 
-    assign PC_out = PC_in + 4;
+    assign  PC_out =  PC_in + 4;
 endmodule
 
 module Adder(PC_in, Imm_in, Sum);
@@ -71,8 +71,22 @@ module mux(A, B, sel, Y);
     input [31:0] A;
     input [31:0] B;
     input wire sel;
-    output [31:0] Y;
-    assign Y = (sel) ? B : A ;
+    output reg [31:0] Y;
+    always @(*)
+        begin
+            Y = (sel) ? B : A ;
+        end
+endmodule
+
+module mux3(A, B, sel, Y);
+    input [31:0] A;
+    input [31:0] B;
+    input wire sel;
+    output reg [31:0] Y;
+    always @(*)
+        begin
+            Y = (sel) ? B : A ;
+        end
 endmodule
 
 module Instruction_Memory(clk, reset, PC_in, Instruction_out);
@@ -171,14 +185,15 @@ module Control(i_Instruction, o_Branch, o_MemRead, o_MemtoReg, o_ALUOp, o_MemWri
     end
 endmodule
 
-module ImmediateGenerator(i_Instruction, o_Immediate);
+module ImmediateGenerator(clk, i_Instruction, o_Immediate);
+    input clk;
     input [31:0] i_Instruction;
     output reg [31:0] o_Immediate;    
 
     initial begin
         o_Immediate = 32'd0;
     end
-    always @(*)
+    always @(i_Instruction)
         begin
             case(i_Instruction[6:0])
                 // I-type Instructions (Immediate Load, Arithmetic)
@@ -369,12 +384,15 @@ module top(clk, reset);
     mux Mux1 (.A(PCPlus4), .B(SumOut), .sel(Select), .Y(Mux1Out));
     Instruction_Memory IM ( .clk(clk), .reset(reset), .PC_in(PC_out[6:2]), .Instruction_out(InstructionOut) );
     Control Control (.i_Instruction(InstructionOut[6:0]), .o_Branch(Branch), .o_MemRead(MemRead), .o_MemtoReg(MemtoReg), .o_ALUOp(ALUOp), .o_MemWrite(MemWrite), .o_ALUSrc(ALUSrc), .o_RegWrite(RegWrite));
-    ImmediateGenerator ImmGen ( .i_Instruction(InstructionOut), .o_Immediate(ImmediateOut));
+    ImmediateGenerator ImmGen (.clk(clk), .i_Instruction(InstructionOut), .o_Immediate(ImmediateOut));
     Register Reg (.clk(clk), .reset(reset), .i_RS1(InstructionOut[19:15]), .i_RS2(InstructionOut[24:20]), .i_RD1(InstructionOut[11:7]), .i_WriteData(Mux3Out), .i_RegWrite(RegWrite), .o_ReadData1(ReadData1Out), .o_ReadData2(ReadData2Out));
     mux Mux2 (.A(ReadData2Out), .B(ImmediateOut), .sel(ALUSrc), .Y(Mux2Out));
     ALU_Control AC (.i_Func7(InstructionOut[30]), .i_Func3(InstructionOut[14:12]), .i_ALUOp(ALUOp), .o_Operation(Control_out));
     ALU ALU2 (.A(ReadData1Out), .B(Mux2Out), .i_Operation(Control_out), .o_ALU_Result(ALUResult), .o_Zero(zero));
     Data_Memory DM (.i_MemWrite(MemWrite), .i_MemRead(MemRead), .i_Address(ALUResult[4:0]), .i_WriteData(ReadData2Out),  .o_ReadData(DM_read) ,.clk(clk));
-    mux Mux3 (.A(ALUResult), .B(DM_read), .sel(MemtoReg), .Y(Mux3Out));
-    
+    mux3 Mux3 (.A(ALUResult), .B(DM_read), .sel(MemtoReg), .Y(Mux3Out));
+
+    // always @(*) begin
+    //     $display("PC_out : %h | Instruction_out : %h | Immediate_out : %h | PC_in : %h | Immediate_in : %h | Sum : %h | Select : %h | Mux1Out : %h", PC_out, InstructionOut, ImmediateOut, PC_out, ImmediateOut, SumOut, Select, Mux1Out);
+    // end
 endmodule
